@@ -10,6 +10,9 @@ namespace GlowwormSelection
     {
         static void Main(string[] args)
         {
+            Population p = new Population();
+            p.GenerateCityData(100);
+            p.GenerateInitialPopulation(25);
         }
     }
 }

@@ -11,6 +11,11 @@ namespace GlowwormSelection.TSP
         public List<City> cities;
         private int cost = -1;
 
+        public Chromosome(List<City> cities)
+        {
+            this.cities = cities;
+        }
+
         public int CalculateCost()
         {
             // only calculate the cost once
