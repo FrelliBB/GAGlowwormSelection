@@ -95,7 +95,7 @@ namespace GlowwormSelection
             }
 
             int arraySize = (int)Math.Sqrt(population.Count);
-            float initialLuciferin = 50f;
+            float initialLuciferin = 0.5f;
             List<Glowworm> glowworms = new List<Glowworm>(); //the glowworms that traverse the population for the selection process
             Random r = new Random();
 
@@ -106,31 +106,74 @@ namespace GlowwormSelection
             population.Shuffle();
 
             Chromosome[,] solutionSpace = new Chromosome[arraySize, arraySize];
+            float glowwormRange = arraySize / 2f;
 
             // Assign population to our 2D array
-            for (int i = 0; i < solutionSpace.GetUpperBound(0); i++)
+            Stack<Chromosome> solutionsToAdd = new Stack<Chromosome>(population);
+            for (int i = 0; i <= solutionSpace.GetUpperBound(0); i++)
             {
-                for (int j = 0; j < solutionSpace.GetUpperBound(1); j++)
+                for (int j = 0; j <= solutionSpace.GetUpperBound(1); j++)
                 {
-                    solutionSpace[i, j] = population.ElementAt(i + j);
+                    solutionSpace[i, j] = solutionsToAdd.Pop();
                 }
             }
 
-            // 2. Distribute glowworms randomly across 2D array
-
-            for (int i = 0; i < population.Count / 10; i++)
+            // 2. Distribute glowworms randomly across a 2d plane
+            int glowwormCount = (population.Count + 9) / 10;
+            for (int i = 0; i < glowwormCount; i++)
             {
-                glowworms.Add(new Glowworm(r.Next(0, arraySize - 1), r.Next(0, arraySize - 1), initialLuciferin));
+                glowworms.Add(new Glowworm(i, r.Next(0, arraySize - 1), r.Next(0, arraySize - 1), initialLuciferin));
             }
 
-            // 3. Luciferin update
+            // 3. Repeat 4-5 for x steps for each glowworm
+            for (int i = 0; i < population.Count / 4; i++)
+            {
+                // 4. Luciferin update
+                foreach (Glowworm glowworm in glowworms)
+                {
+                    glowworm.Luciferin += solutionSpace[glowworm.X, glowworm.Y].GetFitness();
+                }
 
-            // 4. Glowworm movement
+                // 5. Glowworm movement
+                foreach (Glowworm currentGlowworm in glowworms)
+                {
+                    Glowworm closestGlowworm = null;
+                    double closestDistance = double.MaxValue;
 
-            // 5. Repeat 3-4 for x steps
+                    //Find glowworm in range with the highest luciferin value
+                    foreach (Glowworm neighbouringGlowworm in glowworms)
+                    {
+                        // Make sure that the current glowworm isn't the same as the neighbour
+                        if (currentGlowworm.ID != neighbouringGlowworm.ID)
+                        {
+                            // check if neighbouring glowworm has higher luciferin value
+                            if (neighbouringGlowworm.Luciferin > currentGlowworm.Luciferin)
+                            {
+                                //check if neighbouring glowworm is in range and closer than current closest glowworm (using euclidean distance)
+                                double distance = Math.Sqrt(Math.Pow(currentGlowworm.X - neighbouringGlowworm.X, 2) + Math.Pow(currentGlowworm.Y - neighbouringGlowworm.Y, 2));
+
+                                if (distance <= glowwormRange && distance < closestDistance)
+                                {
+                                    closestDistance = distance;
+                                    closestGlowworm = neighbouringGlowworm;
+                                }
+                            }
+                        }
+                    }
+
+                    if (closestGlowworm != null)
+                    {
+                        // If glowworm was found move towards it
+                    }
+                    else
+                    {
+                        // Move randomly within bounds
+                    }
+
+                }
+            }
+
             throw new NotImplementedException();
         }
-
-
     }
 }

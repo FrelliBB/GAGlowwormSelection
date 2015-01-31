@@ -11,8 +11,10 @@ namespace GlowwormSelection
         static void Main(string[] args)
         {
             Population p = new Population();
-            p.GenerateCityData(100);
-            p.GenerateInitialPopulation(25);
+            p.GenerateCityData(1000);
+            p.GenerateInitialPopulation(100);
+
+            p.GlowwormSelection();
         }
     }
 }
