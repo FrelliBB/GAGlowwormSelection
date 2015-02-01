@@ -29,7 +29,6 @@ namespace GlowwormSelection
             cities = new List<City>();
 
             Dictionary<string, int> distances = new Dictionary<string, int>(); // stores the distances for the entire graph
-            Random r = new Random();
 
             for (int i = 0; i < numberOfCities; i++)
             {
@@ -49,7 +48,7 @@ namespace GlowwormSelection
                         // TryGetValue returns default value for int if the key was not found. Our distance can never be at 0 so we can use this to check if the key exists
                         if (distance == 0)
                         {
-                            distance = r.Next(1, 100);
+                            distance = ThreadSafeRandom.ThisThreadsRandom.Next(1, 100);
                             distances[i + "-" + j] = distance;
                             distances[j + "-" + i] = distance;
                         }
@@ -97,8 +96,6 @@ namespace GlowwormSelection
             int arraySize = (int)Math.Sqrt(population.Count);
             float initialLuciferin = 0.5f;
             List<Glowworm> glowworms = new List<Glowworm>(); //the glowworms that traverse the population for the selection process
-            Random r = new Random();
-
 
             // 1. Transform population into 2D array
 
@@ -122,7 +119,7 @@ namespace GlowwormSelection
             int glowwormCount = (population.Count + 9) / 10;
             for (int i = 0; i < glowwormCount; i++)
             {
-                glowworms.Add(new Glowworm(i, r.Next(0, arraySize - 1), r.Next(0, arraySize - 1), initialLuciferin));
+                glowworms.Add(new Glowworm(i, ThreadSafeRandom.ThisThreadsRandom.Next(0, arraySize - 1), ThreadSafeRandom.ThisThreadsRandom.Next(0, arraySize - 1), initialLuciferin));
             }
 
             // 3. Repeat 4-5 for x steps for each glowworm
@@ -163,15 +160,19 @@ namespace GlowwormSelection
 
                     if (closestGlowworm != null)
                     {
-                        // If glowworm was found move towards it
+                        // If a glowworn with a higher luciferin was found in rage move towards it
+                        currentGlowworm.MoveTowardsNeighbour(closestGlowworm.X, closestGlowworm.Y);
                     }
                     else
                     {
                         // Move randomly within bounds
+                        currentGlowworm.MoveRandomly(arraySize - 1, arraySize - 1);
                     }
 
                 }
             }
+
+            // Find best solutions
 
             throw new NotImplementedException();
         }

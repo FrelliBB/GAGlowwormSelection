@@ -21,5 +21,15 @@ namespace GlowwormSelection
             this.Y = y;
             this.Luciferin = luciferinStart;
         }
+
+        public void MoveRandomly(int boundsX, int boundsY)
+        {
+
+        }
+
+        public void MoveTowardsNeighbour(int neighourX, int neighbourY)
+        {
+
+        }
     }
 }

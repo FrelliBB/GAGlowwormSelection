@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ThreadSafeRandom.cs" />
     <Compile Include="Glowworm.cs" />
     <Compile Include="TSP\Chromosome.cs" />
     <Compile Include="TSP\City.cs" />
