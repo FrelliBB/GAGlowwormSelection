@@ -13,7 +13,7 @@ namespace GlowwormSelection.Extensions
             while (n > 1)
             {
                 n--;
-                int k = ThreadSafeRandom.ThisThreadsRandom.Next(n + 1);
+                int k = ThreadSafeRandom.CurrentThreadRandom.Next(n + 1);
                 T value = list[k];
                 list[k] = list[n];
                 list[n] = value;

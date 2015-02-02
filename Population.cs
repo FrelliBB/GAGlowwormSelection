@@ -48,7 +48,7 @@ namespace GlowwormSelection
                         // TryGetValue returns default value for int if the key was not found. Our distance can never be at 0 so we can use this to check if the key exists
                         if (distance == 0)
                         {
-                            distance = ThreadSafeRandom.ThisThreadsRandom.Next(1, 100);
+                            distance = ThreadSafeRandom.CurrentThreadRandom.Next(1, 101);
                             distances[i + "-" + j] = distance;
                             distances[j + "-" + i] = distance;
                         }
@@ -119,12 +119,13 @@ namespace GlowwormSelection
             int glowwormCount = (population.Count + 9) / 10;
             for (int i = 0; i < glowwormCount; i++)
             {
-                glowworms.Add(new Glowworm(i, ThreadSafeRandom.ThisThreadsRandom.Next(0, arraySize - 1), ThreadSafeRandom.ThisThreadsRandom.Next(0, arraySize - 1), initialLuciferin));
+                glowworms.Add(new Glowworm(i, ThreadSafeRandom.CurrentThreadRandom.Next(0, arraySize - 1), ThreadSafeRandom.CurrentThreadRandom.Next(0, arraySize - 1), initialLuciferin));
             }
 
             // 3. Repeat 4-5 for x steps for each glowworm
             for (int i = 0; i < population.Count / 4; i++)
             {
+                Console.WriteLine("MOVEMENT PHASE {0}:", i + 1);
                 // 4. Luciferin update
                 foreach (Glowworm glowworm in glowworms)
                 {
@@ -141,7 +142,7 @@ namespace GlowwormSelection
                     foreach (Glowworm neighbouringGlowworm in glowworms)
                     {
                         // Make sure that the current glowworm isn't the same as the neighbour
-                        if (currentGlowworm.ID != neighbouringGlowworm.ID)
+                        if (!(currentGlowworm.ID == neighbouringGlowworm.ID || (currentGlowworm.X == neighbouringGlowworm.X && currentGlowworm.Y == neighbouringGlowworm.Y)))
                         {
                             // check if neighbouring glowworm has higher luciferin value
                             if (neighbouringGlowworm.Luciferin > currentGlowworm.Luciferin)
@@ -160,15 +161,9 @@ namespace GlowwormSelection
 
                     if (closestGlowworm != null)
                     {
-                        // If a glowworn with a higher luciferin was found in rage move towards it
+                        // If a glowworn with a higher luciferin was found in range move towards it
                         currentGlowworm.MoveTowardsNeighbour(closestGlowworm.X, closestGlowworm.Y);
                     }
-                    else
-                    {
-                        // Move randomly within bounds
-                        currentGlowworm.MoveRandomly(arraySize - 1, arraySize - 1);
-                    }
-
                 }
             }
 

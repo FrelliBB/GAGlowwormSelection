@@ -12,7 +12,7 @@ namespace GlowwormSelection.Extensions
         [ThreadStatic]
         private static Random Local;
 
-        public static Random ThisThreadsRandom
+        public static Random CurrentThreadRandom
         {
             get { return Local ?? (Local = new Random(unchecked(Environment.TickCount * 31 + Thread.CurrentThread.ManagedThreadId))); }
         }

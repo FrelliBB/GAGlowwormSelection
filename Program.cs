@@ -13,7 +13,6 @@ namespace GlowwormSelection
             Population p = new Population();
             p.GenerateCityData(1000);
             p.GenerateInitialPopulation(100);
-
             p.GlowwormSelection();
         }
     }
