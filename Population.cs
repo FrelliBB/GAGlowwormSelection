@@ -48,7 +48,7 @@ namespace GlowwormSelection
                         // TryGetValue returns default value for int if the key was not found. Our distance can never be at 0 so we can use this to check if the key exists
                         if (distance == 0)
                         {
-                            distance = ThreadSafeRandom.CurrentThreadRandom.Next(1, 101);
+                            distance = ThreadSafeRandom.CurrentThreadRandom.Next(101);
                             distances[i + "-" + j] = distance;
                             distances[j + "-" + i] = distance;
                         }
@@ -103,7 +103,7 @@ namespace GlowwormSelection
             population.Shuffle();
 
             Chromosome[,] solutionSpace = new Chromosome[arraySize, arraySize];
-            float glowwormRange = arraySize / 2f;
+            float glowwormRange = arraySize / 3f;
 
             // Assign population to our 2D array
             Stack<Chromosome> solutionsToAdd = new Stack<Chromosome>(population);
@@ -119,7 +119,7 @@ namespace GlowwormSelection
             int glowwormCount = (population.Count + 9) / 10;
             for (int i = 0; i < glowwormCount; i++)
             {
-                glowworms.Add(new Glowworm(i, ThreadSafeRandom.CurrentThreadRandom.Next(0, arraySize - 1), ThreadSafeRandom.CurrentThreadRandom.Next(0, arraySize - 1), initialLuciferin));
+                glowworms.Add(new Glowworm(i, ThreadSafeRandom.CurrentThreadRandom.Next(arraySize), ThreadSafeRandom.CurrentThreadRandom.Next(arraySize), initialLuciferin));
             }
 
             // 3. Repeat 4-5 for x steps for each glowworm
