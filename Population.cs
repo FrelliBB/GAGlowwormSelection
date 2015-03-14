@@ -122,17 +122,20 @@ namespace GlowwormSelection
                 glowworms.Add(new Glowworm(i, ThreadSafeRandom.CurrentThreadRandom.Next(arraySize), ThreadSafeRandom.CurrentThreadRandom.Next(arraySize), initialLuciferin));
             }
 
-            // 3. Repeat 4-5 for x steps for each glowworm
+            //Perform initial luciferin update
+            foreach (Glowworm glowworm in glowworms)
+            {
+                glowworm.Luciferin += solutionSpace[glowworm.X, glowworm.Y].GetFitness();
+            }
+
+            // 3. Repeat 4-5 for x steps for x movement phases
             for (int i = 0; i < population.Count / 4; i++)
             {
-                Console.WriteLine("MOVEMENT PHASE {0}:", i + 1);
-                // 4. Luciferin update
-                foreach (Glowworm glowworm in glowworms)
-                {
-                    glowworm.Luciferin += solutionSpace[glowworm.X, glowworm.Y].GetFitness();
-                }
+                bool movementOccured = false;
 
-                // 5. Glowworm movement
+                Console.WriteLine("MOVEMENT PHASE {0}:", i + 1);
+
+                // 4. Glowworm movement
                 foreach (Glowworm currentGlowworm in glowworms)
                 {
                     Glowworm closestGlowworm = null;
@@ -163,13 +166,43 @@ namespace GlowwormSelection
                     {
                         // If a glowworn with a higher luciferin was found in range move towards it
                         currentGlowworm.MoveTowardsNeighbour(closestGlowworm.X, closestGlowworm.Y);
+                        movementOccured = true;
                     }
+                }
+
+                // 5. Luciferin update
+                foreach (Glowworm glowworm in glowworms)
+                {
+                    glowworm.Luciferin += solutionSpace[glowworm.X, glowworm.Y].GetFitness();
+                }
+
+                if (!movementOccured)
+                {
+                    Console.WriteLine("No movement occured. Stopping.");
+                    break;
                 }
             }
 
             // Find best solutions
+            List<Chromosome> traversedSolutions = new List<Chromosome>();
+            for (int i = 0; i < solutionSpace.GetUpperBound(0); i++)
+            {
+                for (int j = 0; j < solutionSpace.GetUpperBound(1); j++)
+                {
+                    if (solutionSpace[i, j].GetCost() != -1)
+                    {
+                        traversedSolutions.Add(solutionSpace[i, j]);
+                    }
+                }
+            }
 
-            throw new NotImplementedException();
+            Console.WriteLine("Population Chromosomes: " + population.Count);
+            Console.WriteLine("Traversed Chromosomes: " + traversedSolutions.Count);
+
+            Console.WriteLine("Lowest Fitness In Population: " + population.Min(s => s.GetFitness()));
+            Console.WriteLine("Highest Fitness From Traversed: " + traversedSolutions.Max(s => s.GetFitness()));
+            Console.WriteLine("Highest Fitness In Population: " + population.Max(s => s.GetFitness()));
+            return traversedSolutions;
         }
     }
 }

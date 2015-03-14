@@ -14,6 +14,8 @@ namespace GlowwormSelection
             p.GenerateCityData(1000);
             p.GenerateInitialPopulation(100);
             p.GlowwormSelection();
+
+            Console.ReadLine();
         }
     }
 }
