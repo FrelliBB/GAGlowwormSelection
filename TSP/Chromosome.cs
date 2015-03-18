@@ -16,7 +16,7 @@ namespace GlowwormSelection.TSP
             this.cities = cities;
         }
 
-        public float GetFitness()
+        public double GetFitness()
         {
             // only calculate the cost once
             if (cost == -1)
@@ -34,7 +34,7 @@ namespace GlowwormSelection.TSP
 
             }
 
-            return 1000000f / cost;
+            return 1.0 - (cost / (cities.Count * 100.0));
         }
 
         public int GetCost()

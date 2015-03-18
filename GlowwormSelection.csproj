@@ -45,7 +45,8 @@
     <Compile Include="Glowworm.cs" />
     <Compile Include="SelectionSchemes\GlowwormSelection.cs" />
     <Compile Include="SelectionSchemes\ISelection.cs" />
-    <Compile Include="SelectionSchemes\Chromosome.cs" />
+    <Compile Include="SelectionSchemes\TruncateSelection.cs" />
+    <Compile Include="TSP\Chromosome.cs" />
     <Compile Include="TSP\City.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Population.cs" />
@@ -55,6 +56,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
