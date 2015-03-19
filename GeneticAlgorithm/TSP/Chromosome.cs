@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GlowwormSelection.TSP
+namespace GlowwormSelection.GeneticAlgorithm.TSP
 {
     class Chromosome
     {

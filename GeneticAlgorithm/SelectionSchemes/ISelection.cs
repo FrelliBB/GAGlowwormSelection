@@ -1,7 +1,7 @@
-﻿using GlowwormSelection.TSP;
+﻿using GlowwormSelection.GeneticAlgorithm.TSP;
 using System.Collections.Generic;
 
-namespace GlowwormSelection.SelectionSchemes
+namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
 {
     interface ISelection
     {

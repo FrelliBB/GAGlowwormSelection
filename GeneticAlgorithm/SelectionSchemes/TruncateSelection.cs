@@ -1,8 +1,8 @@
-﻿using GlowwormSelection.TSP;
+﻿using GlowwormSelection.GeneticAlgorithm.TSP;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GlowwormSelection.SelectionSchemes
+namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
 {
     class TruncateSelection : ISelection
     {

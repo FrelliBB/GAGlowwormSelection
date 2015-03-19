@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GlowwormSelection.GeneticAlgorithm.TSP;
+using System;
 
 namespace GlowwormSelection
 {
@@ -9,7 +10,7 @@ namespace GlowwormSelection
             Population p = new Population();
             p.GenerateCityData(1000);
             p.GenerateInitialPopulation(100);
-            new SelectionSchemes.GlowwormSelection().Select(p.population, 10);
+            new GlowwormSelection.GeneticAlgorithm.SelectionSchemes.GlowwormSelection().Select(p.population, 10);
 
             Console.ReadLine();
         }

@@ -1,9 +1,8 @@
 ﻿using GlowwormSelection.Extensions;
-using GlowwormSelection.TSP;
 using System;
 using System.Collections.Generic;
 
-namespace GlowwormSelection
+namespace GlowwormSelection.GeneticAlgorithm.TSP
 {
     class Population
     {

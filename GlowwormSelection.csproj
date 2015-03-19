@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\ThreadSafeRandom.cs" />
+    <Compile Include="GeneticAlgorithm\SelectionSchemes\RouletteWheelSelection.cs" />
+    <Compile Include="GeneticAlgorithm\SelectionSchemes\TournamentSelection.cs" />
     <Compile Include="GSO\Glowworm.cs" />
     <Compile Include="GeneticAlgorithm\SelectionSchemes\GlowwormSelection.cs" />
     <Compile Include="GeneticAlgorithm\SelectionSchemes\ISelection.cs" />
@@ -49,7 +51,7 @@
     <Compile Include="GeneticAlgorithm\TSP\Chromosome.cs" />
     <Compile Include="GeneticAlgorithm\TSP\City.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
-    <Compile Include="GeneticAlgorithm\Population.cs" />
+    <Compile Include="GeneticAlgorithm\TSP\Population.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
