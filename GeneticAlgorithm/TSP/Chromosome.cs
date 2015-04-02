@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using GlowwormSelection.Extensions;
+using System.Collections.Generic;
 
 namespace GlowwormSelection.GeneticAlgorithm.TSP
 {
@@ -41,6 +42,15 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
         public void ResetCost()
         {
             cost = -1;
+        }
+
+        public void Mutate()
+        {
+            int rndIndex = ThreadSafeRandom.CurrentThreadRandom.Next(0, cities.Count);
+            City rndCity = cities[rndIndex];
+
+            cities.Remove(rndCity);
+            cities.Insert(ThreadSafeRandom.CurrentThreadRandom.Next(0, cities.Count), rndCity);
         }
     }
 }
