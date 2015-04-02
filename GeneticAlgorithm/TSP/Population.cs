@@ -6,7 +6,7 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 {
     class Population
     {
-        public List<Chromosome> population; //stores the possible solutions (chromosomes) for the TSP
+        public List<Chromosome> chromosomes; //stores the possible solutions (chromosomes) for the TSP
         private List<City> cities; //stores the cities that need to be traversed for the TSP
 
 
@@ -60,19 +60,19 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 
         public void GenerateInitialPopulation(int populationSize)
         {
-            population = new List<Chromosome>();
+            chromosomes = new List<Chromosome>();
 
             for (int i = 0; i < populationSize; i++)
             {
                 List<City> randomizedCities = new List<City>(cities);
                 randomizedCities.Shuffle();
-                population.Add(new Chromosome(randomizedCities));
+                chromosomes.Add(new Chromosome(randomizedCities));
             }
         }
 
         public void ResetChromosomeFitness()
         {
-            foreach (Chromosome solution in population)
+            foreach (Chromosome solution in chromosomes)
             {
                 solution.ResetCost();
             }

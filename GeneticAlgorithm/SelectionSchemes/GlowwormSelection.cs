@@ -6,13 +6,13 @@ using System.Linq;
 
 namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
 {
-    class GlowwormSelection : ISelection
+    class GlowwormSwarmSelection : ISelection
     {
         public List<TSP.Chromosome> Select(List<TSP.Chromosome> population, int number)
         {
             if (Math.Sqrt(population.Count) % 1 != 0)
             {
-                throw new Exception("Non-square population sizes not supported for glowworm selection.");
+                throw new Exception("Non-square chromosomes sizes not supported for glowworm selection.");
             }
 
             int arraySize = (int)Math.Sqrt(population.Count);
@@ -118,13 +118,7 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
                 }
             }
 
-            Console.WriteLine("Population Chromosomes: " + population.Count);
-            Console.WriteLine("Traversed Chromosomes: " + traversedSolutions.Count);
-
-            Console.WriteLine("Lowest Fitness In Population: " + population.Min(s => s.GetFitness()));
-            Console.WriteLine("Highest Fitness From Traversed: " + traversedSolutions.Max(s => s.GetFitness()));
-            Console.WriteLine("Highest Fitness In Population: " + population.Max(s => s.GetFitness()));
-            return traversedSolutions;
+            return traversedSolutions.OrderBy(s => s.GetFitness()).Take(number).ToList();
         }
     }
 }
