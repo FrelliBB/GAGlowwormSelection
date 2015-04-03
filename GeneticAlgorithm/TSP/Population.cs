@@ -14,6 +14,8 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
         public int PopulationSize { get; set; }
         public int NumberOfCities { get; set; }
 
+        int currentGeneration = 1;
+
         public Population(int numberOfCities, int populationSize)
         {
             this.PopulationSize = populationSize;
@@ -95,15 +97,14 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
         {
             // select chromosomes using gso
             var selected = new GlowwormSwarmSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
-
-            Console.WriteLine("Selected: " + selected.Count);
+            //var selected = new SelectionSchemes.RouletteWheelSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
 
             // remove uncalculated chromosomes from population
             this.chromosomes.RemoveAll(m => m.GetCost() == -1);
             chromosomes = chromosomes.OrderByDescending(c => c.GetCost()).ToList();
 
             // leave only top 25% of population
-            while (this.chromosomes.Count > PopulationSize/4)
+            while (this.chromosomes.Count > PopulationSize / 4)
             {
                 chromosomes.RemoveAt(0);
             }
@@ -111,18 +112,20 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             // fill the remaining empty space with children generated from selected chromosomes
             while (this.chromosomes.Count < PopulationSize)
             {
-                Chromosome parent1 = selected[0];
-                Chromosome parent2 = selected[1];
+                Chromosome parent1 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
+                Chromosome parent2 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
 
-                chromosomes.Add(OrderedCrossover.MakeChild(parent1, parent2));
-
-                if (this.chromosomes.Count < PopulationSize)
+                Chromosome child = OrderedCrossover.MakeChild(parent1, parent2);
+                if (ThreadSafeRandom.CurrentThreadRandom.NextDouble() < 0.002)
                 {
-                    chromosomes.Add(OrderedCrossover.MakeChild(parent2, parent1));
+                    child.Mutate();
                 }
+
+                chromosomes.Add(child);
             }
 
-            Console.WriteLine("Best Chromosome: " + chromosomes.Where(c => c.GetCost() != -1).Min(c => c.GetCost()));
+            Console.WriteLine("Generation " + currentGeneration + " Best: " + chromosomes.Where(c => c.GetCost() != -1).Min(c => c.GetCost()));
+            currentGeneration++;
         }
     }
 }

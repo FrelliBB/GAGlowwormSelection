@@ -10,14 +10,13 @@ namespace GlowwormSelection
         static void Main(string[] args)
         {
 
-            int numberOfGenerations = 20;
-            Population p = new Population(999, 100);
+            int numberOfGenerations = 50;
+            Population p = new Population(1000, 400);
 
             for (int i = 0; i < numberOfGenerations; i++)
             {
                 p.NextGeneration();
             }
-
 
             Console.ReadLine();
         }
