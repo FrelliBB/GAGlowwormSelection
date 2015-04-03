@@ -55,8 +55,6 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
             {
                 bool movementOccured = false;
 
-                Console.WriteLine("MOVEMENT PHASE {0}:", i + 1);
-
                 // 4. Glowworm movement
                 foreach (Glowworm currentGlowworm in glowworms)
                 {
@@ -100,7 +98,6 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
 
                 if (!movementOccured)
                 {
-                    Console.WriteLine("No movement occured. Stopping.");
                     break;
                 }
             }
@@ -118,7 +115,7 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
                 }
             }
 
-            return traversedSolutions.OrderBy(s => s.GetFitness()).Take(number).ToList();
+            return traversedSolutions.OrderByDescending(s => s.GetFitness()).Take(number).ToList();
         }
     }
 }

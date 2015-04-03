@@ -1,6 +1,9 @@
 ﻿using GlowwormSelection.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using GlowwormSelection.GeneticAlgorithm.Crossover;
+using GlowwormSelection.GeneticAlgorithm.SelectionSchemes;
 
 namespace GlowwormSelection.GeneticAlgorithm.TSP
 {
@@ -8,7 +11,17 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
     {
         public List<Chromosome> chromosomes; //stores the possible solutions (chromosomes) for the TSP
         private List<City> cities; //stores the cities that need to be traversed for the TSP
+        public int PopulationSize { get; set; }
+        public int NumberOfCities { get; set; }
 
+        public Population(int numberOfCities, int populationSize)
+        {
+            this.PopulationSize = populationSize;
+            this.NumberOfCities = numberOfCities;
+
+            GenerateCityData(numberOfCities);
+            GenerateInitialPopulation(populationSize);
+        }
 
         public List<City> GetCityData()
         {
@@ -76,6 +89,40 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             {
                 solution.ResetCost();
             }
+        }
+
+        public void NextGeneration()
+        {
+            // select chromosomes using gso
+            var selected = new GlowwormSwarmSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
+
+            Console.WriteLine("Selected: " + selected.Count);
+
+            // remove uncalculated chromosomes from population
+            this.chromosomes.RemoveAll(m => m.GetCost() == -1);
+            chromosomes = chromosomes.OrderByDescending(c => c.GetCost()).ToList();
+
+            // leave only top 25% of population
+            while (this.chromosomes.Count > PopulationSize/4)
+            {
+                chromosomes.RemoveAt(0);
+            }
+
+            // fill the remaining empty space with children generated from selected chromosomes
+            while (this.chromosomes.Count < PopulationSize)
+            {
+                Chromosome parent1 = selected[0];
+                Chromosome parent2 = selected[1];
+
+                chromosomes.Add(OrderedCrossover.MakeChild(parent1, parent2));
+
+                if (this.chromosomes.Count < PopulationSize)
+                {
+                    chromosomes.Add(OrderedCrossover.MakeChild(parent2, parent1));
+                }
+            }
+
+            Console.WriteLine("Best Chromosome: " + chromosomes.Where(c => c.GetCost() != -1).Min(c => c.GetCost()));
         }
     }
 }

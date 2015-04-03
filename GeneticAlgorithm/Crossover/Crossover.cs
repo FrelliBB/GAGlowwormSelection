@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GlowwormSelection.GeneticAlgorithm.Crossover
 {
-    class Crossover
+    class OrderedCrossover
     {
         public static Chromosome MakeChild(Chromosome parent1, Chromosome parent2)
         {

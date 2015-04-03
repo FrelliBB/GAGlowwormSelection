@@ -65,7 +65,6 @@ namespace GlowwormSelection
 
         public void MoveTowardsNeighbour(int neighbourX, int neighbourY)
         {
-            Console.WriteLine(String.Format("Worm {0} at ({1},{2}) is moving towards worm at location ({3},{4})", ID, X, Y, neighbourX, neighbourY));
             bool moved = false;
 
             do
@@ -122,8 +121,6 @@ namespace GlowwormSelection
                 }
 
             } while (!moved);
-
-            Console.WriteLine(String.Format("Worm {0} at ({1},{2})", ID, X, Y));
         }
     }
 }
