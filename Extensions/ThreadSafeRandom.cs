@@ -12,5 +12,10 @@ namespace GlowwormSelection.Extensions
         {
             get { return Local ?? (Local = new Random(unchecked(Environment.TickCount * 31 + Thread.CurrentThread.ManagedThreadId))); }
         }
+
+        public static void InitializeSeed(int seed)
+        {
+            Local = new Random(seed);
+        }
     }
 }

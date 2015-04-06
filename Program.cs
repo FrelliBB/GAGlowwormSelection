@@ -1,4 +1,5 @@
-﻿using GlowwormSelection.GeneticAlgorithm.Crossover;
+﻿using GlowwormSelection.Extensions;
+using GlowwormSelection.GeneticAlgorithm.Crossover;
 using GlowwormSelection.GeneticAlgorithm.SelectionSchemes;
 using GlowwormSelection.GeneticAlgorithm.TSP;
 using System;
@@ -9,9 +10,9 @@ namespace GlowwormSelection
     {
         static void Main(string[] args)
         {
-
-            int numberOfGenerations = 50;
-            Population p = new Population(1000, 400);
+            ThreadSafeRandom.InitializeSeed(1337);
+            int numberOfGenerations = 1000;
+            Population p = new Population(1000, 100);
 
             for (int i = 0; i < numberOfGenerations; i++)
             {

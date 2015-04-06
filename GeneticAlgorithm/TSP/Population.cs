@@ -95,9 +95,10 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 
         public void NextGeneration()
         {
-            // select chromosomes using gso
             var selected = new GlowwormSwarmSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
-            //var selected = new SelectionSchemes.RouletteWheelSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
+            //var selected = new RouletteWheelSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
+            //var selected = new TruncateSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
+            //var selected = new TournamentSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
 
             // remove uncalculated chromosomes from population
             this.chromosomes.RemoveAll(m => m.GetCost() == -1);
@@ -112,11 +113,15 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             // fill the remaining empty space with children generated from selected chromosomes
             while (this.chromosomes.Count < PopulationSize)
             {
-                Chromosome parent1 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
-                Chromosome parent2 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
+                var parents = new RouletteWheelSelection().Select(selected, 2);
+                Chromosome parent1 = parents[0];
+                Chromosome parent2 = parents[1];
+
+                //Chromosome parent1 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
+                //Chromosome parent2 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
 
                 Chromosome child = OrderedCrossover.MakeChild(parent1, parent2);
-                if (ThreadSafeRandom.CurrentThreadRandom.NextDouble() < 0.002)
+                if (ThreadSafeRandom.CurrentThreadRandom.NextDouble() < 0.02)
                 {
                     child.Mutate();
                 }
