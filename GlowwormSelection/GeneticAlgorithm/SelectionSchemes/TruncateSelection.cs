@@ -8,7 +8,7 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
     {
         public List<Chromosome> Select(List<Chromosome> population, int number)
         {
-            return population.OrderBy(p => p.GetFitness()).Take(10).ToList();
+            return population.OrderByDescending(p => p.GetFitness()).Take(number).ToList();
         }
     }
 }
