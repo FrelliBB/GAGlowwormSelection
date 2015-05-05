@@ -44,15 +44,17 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
                 glowworms.Add(new Glowworm(i, ThreadSafeRandom.CurrentThreadRandom.Next(arraySize), ThreadSafeRandom.CurrentThreadRandom.Next(arraySize), initialLuciferin));
             }
 
-            //Perform initial luciferin update
-            foreach (Glowworm glowworm in glowworms)
-            {
-                glowworm.Luciferin += solutionSpace[glowworm.X, glowworm.Y].GetFitness();
-            }
 
             // 3. Repeat 4-5 for x steps for x movement phases
             for (int i = 0; i < population.Count / 4; i++)
             {
+
+                //Perform initial luciferin update
+                foreach (Glowworm glowworm in glowworms)
+                {
+                    glowworm.Luciferin += solutionSpace[glowworm.X, glowworm.Y].GetFitness();
+                }
+
                 bool movementOccured = false;
 
                 // 4. Glowworm movement
@@ -88,12 +90,6 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
                         currentGlowworm.MoveTowardsNeighbour(closestGlowworm.X, closestGlowworm.Y);
                         movementOccured = true;
                     }
-                }
-
-                // 5. Luciferin update
-                foreach (Glowworm glowworm in glowworms)
-                {
-                    glowworm.Luciferin += solutionSpace[glowworm.X, glowworm.Y].GetFitness();
                 }
 
                 if (!movementOccured)
