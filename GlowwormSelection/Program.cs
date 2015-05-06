@@ -12,7 +12,7 @@ namespace GlowwormSelection
         {
             ThreadSafeRandom.InitializeSeed(1337);
             int numberOfGenerations = 1000;
-            Population p = new Population(1000, 100);
+            Population p = new Population(1000, 225);
 
             for (int i = 0; i < numberOfGenerations; i++)
             {

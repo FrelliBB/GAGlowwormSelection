@@ -95,8 +95,8 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 
         public void NextGeneration()
         {
-            var selected = new GlowwormSwarmSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
-            //var selected = new RouletteWheelSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
+            //var selected = new GlowwormSwarmSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
+            var selected = new RouletteWheelSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
             //var selected = new TruncateSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
             //var selected = new TournamentSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
 
@@ -104,24 +104,29 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             this.chromosomes.RemoveAll(m => m.GetCost() == -1);
             chromosomes = chromosomes.OrderByDescending(c => c.GetCost()).ToList();
 
-            // leave only top 25% of population
-            while (this.chromosomes.Count > PopulationSize / 4)
+            // leave only top 10% of population
+            while (this.chromosomes.Count > PopulationSize / 10)
             {
                 chromosomes.RemoveAt(0);
+            }
+
+            if (currentGeneration % 5 == 0)
+            {
+                Console.WriteLine("Generation " + currentGeneration + " Best: " + chromosomes.Min(c => c.GetCost()));
             }
 
             // fill the remaining empty space with children generated from selected chromosomes
             while (this.chromosomes.Count < PopulationSize)
             {
-                //var parents = new RouletteWheelSelection().Select(selected, 2);
-                //Chromosome parent1 = parents[0];
-                //Chromosome parent2 = parents[1];
+                var parents = new RouletteWheelSelection().Select(selected, 2);
+                Chromosome parent1 = parents[0];
+                Chromosome parent2 = parents[1];
 
-                Chromosome parent1 = selected[0];
-                Chromosome parent2 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(1, selected.Count - 1)];
+                //Chromosome parent1 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
+                //Chromosome parent2 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
 
                 Chromosome child = OrderedCrossover.MakeChild(parent1, parent2);
-                if (ThreadSafeRandom.CurrentThreadRandom.NextDouble() < 0.02)
+                if (ThreadSafeRandom.CurrentThreadRandom.NextDouble() < 0.5)
                 {
                     child.Mutate();
                 }
@@ -129,7 +134,7 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
                 chromosomes.Add(child);
             }
 
-            Console.WriteLine("Generation " + currentGeneration + " Best: " + chromosomes.Where(c => c.GetCost() != -1).Min(c => c.GetCost()));
+
             currentGeneration++;
         }
     }
