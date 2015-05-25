@@ -13,38 +13,44 @@ namespace GlowwormSelectionTests
     [TestClass]
     public class SelectionSchemeRunningTimeTests
     {
-        private const int ITERATIONS = 5;
+        private const int ITERATIONS = 100;
 
         [TestMethod]
         public void SelectionSchemeRunningTimeTest()
         {
-            int[] cityCounts = { 100, 1000, 10000, 100000, 1000000 };
+            int[] cityCounts = { 100, 500, 2500, 5000, 10000, 10000 };
+            ISelection[] schemes = { new TournamentSelection(), new GlowwormSwarmSelection(), new TruncateSelection(), new RouletteWheelSelection() };
+
+            StringBuilder sb = new StringBuilder();
 
             //CPU warmup
-            GetAverageRuntime(new GlowwormSwarmSelection(), numberOfCities: 100, populationSize: 100);
-            GetAverageRuntime(new RouletteWheelSelection(), numberOfCities: 100, populationSize: 100);
-            GetAverageRuntime(new TruncateSelection(), numberOfCities: 100, populationSize: 100);
-            GetAverageRuntime(new TournamentSelection(), numberOfCities: 100, populationSize: 100);
+            foreach (var scheme in schemes)
+            {
+                for (int i = 0; i < ITERATIONS; i++)
+                {
+                    GetAverageRuntime(scheme, numberOfCities: 100, populationSize: 100);
+                }
+            }
 
-            //print results
+            sb.Append("City Count,");
+            foreach (var scheme in schemes)
+            {
+                sb.Append(scheme.GetType().Name + ",");
+            } sb.AppendLine();
+
             foreach (var cityCount in cityCounts)
             {
-                Console.WriteLine("City Count: " + cityCount);
+                sb.Append(cityCount + ",");
+                foreach (var scheme in schemes)
+                {
+                    double runtime = GetAverageRuntime(scheme, numberOfCities: cityCount, populationSize: 100);
+                    sb.Append(runtime + ",");
+                }
 
-                double runTimeGlowworm = GetAverageRuntime(new GlowwormSwarmSelection(), numberOfCities: cityCount, populationSize: 100);
-                Console.WriteLine("GSO: " + runTimeGlowworm + "ms");
-
-                double runtimeRoulette = GetAverageRuntime(new RouletteWheelSelection(), numberOfCities: cityCount, populationSize: 100);
-                Console.WriteLine("Roulette: " + runtimeRoulette + "ms");
-
-                double runtimeTruncate = GetAverageRuntime(new TruncateSelection(), numberOfCities: cityCount, populationSize: 100);
-                Console.WriteLine("Truncate: " + runtimeTruncate + "ms");
-
-                double runtimeTournament = GetAverageRuntime(new TournamentSelection(), numberOfCities: cityCount, populationSize: 100);
-                Console.WriteLine("Tournament: " + runtimeTournament + "ms");
-
-                Console.WriteLine();
+                sb.AppendLine();
             }
+
+            Console.WriteLine(sb.ToString());
         }
 
         public double GetAverageRuntime(ISelection selectionScheme, int numberOfCities, int populationSize)
