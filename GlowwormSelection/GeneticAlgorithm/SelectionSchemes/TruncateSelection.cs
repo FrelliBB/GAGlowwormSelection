@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
 {
-    class TruncateSelection : ISelection
+    public class TruncateSelection : ISelection
     {
         public List<Chromosome> Select(List<Chromosome> population, int number)
         {

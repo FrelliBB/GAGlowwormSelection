@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
 {
-
-    class RouletteWheelSelection : ISelection
+    public class RouletteWheelSelection : ISelection
     {
         public List<Chromosome> Select(List<Chromosome> population, int number)
         {

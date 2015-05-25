@@ -7,10 +7,10 @@ using GlowwormSelection.GeneticAlgorithm.SelectionSchemes;
 
 namespace GlowwormSelection.GeneticAlgorithm.TSP
 {
-    class Population
+    public class Population
     {
-        public List<Chromosome> chromosomes; //stores the possible solutions (chromosomes) for the TSP
-        private List<City> cities; //stores the cities that need to be traversed for the TSP
+        public List<Chromosome> Chromosomes { get; set; } //stores the possible solutions (chromosomes) for the TSP
+        public List<City> Cities { get; set; } //stores the cities that need to be traversed for the TSP
         public int PopulationSize { get; set; }
         public int NumberOfCities { get; set; }
 
@@ -25,19 +25,10 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             GenerateInitialPopulation(populationSize);
         }
 
-        public List<City> GetCityData()
-        {
-            return this.cities;
-        }
-
-        public void SetCityData(List<City> cities)
-        {
-            this.cities = cities;
-        }
 
         public void GenerateCityData(int numberOfCities)
         {
-            cities = new List<City>();
+            Cities = new List<City>();
 
             Dictionary<string, int> distances = new Dictionary<string, int>(); // stores the distances for the entire graph
 
@@ -69,25 +60,25 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
                     }
                 }
 
-                cities.Add(city);
+                Cities.Add(city);
             }
         }
 
         public void GenerateInitialPopulation(int populationSize)
         {
-            chromosomes = new List<Chromosome>();
+            Chromosomes = new List<Chromosome>();
 
             for (int i = 0; i < populationSize; i++)
             {
-                List<City> randomizedCities = new List<City>(cities);
+                List<City> randomizedCities = new List<City>(Cities);
                 randomizedCities.Shuffle();
-                chromosomes.Add(new Chromosome(randomizedCities));
+                Chromosomes.Add(new Chromosome(randomizedCities));
             }
         }
 
         public void ResetChromosomeFitness()
         {
-            foreach (Chromosome solution in chromosomes)
+            foreach (Chromosome solution in Chromosomes)
             {
                 solution.ResetCost();
             }
@@ -96,27 +87,27 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
         public void NextGeneration()
         {
             //var selected = new GlowwormSwarmSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
-            var selected = new RouletteWheelSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
+            var selected = new RouletteWheelSelection().Select(this.Chromosomes, (int)Math.Floor(Math.Sqrt(Cities.Count)));
             //var selected = new TruncateSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
             //var selected = new TournamentSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
 
             // remove uncalculated chromosomes from population
-            this.chromosomes.RemoveAll(m => m.GetCost() == -1);
-            chromosomes = chromosomes.OrderByDescending(c => c.GetCost()).ToList();
+            this.Chromosomes.RemoveAll(m => m.GetCost() == -1);
+            Chromosomes = Chromosomes.OrderByDescending(c => c.GetCost()).ToList();
 
             // leave only top 10% of population
-            while (this.chromosomes.Count > PopulationSize / 10)
+            while (this.Chromosomes.Count > PopulationSize / 10)
             {
-                chromosomes.RemoveAt(0);
+                Chromosomes.RemoveAt(0);
             }
 
             if (currentGeneration % 5 == 0)
             {
-                Console.WriteLine("Generation " + currentGeneration + " Best: " + chromosomes.Min(c => c.GetCost()));
+                Console.WriteLine("Generation " + currentGeneration + " Best: " + Chromosomes.Min(c => c.GetCost()));
             }
 
             // fill the remaining empty space with children generated from selected chromosomes
-            while (this.chromosomes.Count < PopulationSize)
+            while (this.Chromosomes.Count < PopulationSize)
             {
                 var parents = new RouletteWheelSelection().Select(selected, 2);
                 Chromosome parent1 = parents[0];
@@ -131,7 +122,7 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
                     child.Mutate();
                 }
 
-                chromosomes.Add(child);
+                Chromosomes.Add(child);
             }
 
 

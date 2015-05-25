@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
 {
-    class GlowwormSwarmSelection : ISelection
+    public class GlowwormSwarmSelection : ISelection
     {
         public List<TSP.Chromosome> Select(List<TSP.Chromosome> population, int number)
         {

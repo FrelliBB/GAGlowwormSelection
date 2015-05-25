@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GlowwormSelection.GeneticAlgorithm.TSP
 {
-    class Chromosome
+    public class Chromosome
     {
         public List<City> cities;
         private int cost = -1;

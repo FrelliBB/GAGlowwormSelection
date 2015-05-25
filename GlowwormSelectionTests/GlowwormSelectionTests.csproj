@@ -55,6 +55,12 @@
     <Compile Include="SelectionSchemePressureTests.cs" />
     <Compile Include="SelectionSchemeRunningTimeTests.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GlowwormSelection\GlowwormSelection.csproj">
+      <Project>{c7a1dd50-c2bb-43b6-9a5c-ebe8a0b7b835}</Project>
+      <Name>GlowwormSelection</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -2,7 +2,7 @@
 
 namespace GlowwormSelection.GeneticAlgorithm.TSP
 {
-    class City
+    public class City
     {
         public string Name { get; set; }
         public Dictionary<string, int> Distances = new Dictionary<string, int>();

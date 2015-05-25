@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
 {
-    interface ISelection
+    public interface ISelection
     {
         List<Chromosome> Select(List<Chromosome> population, int number);
     }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
 {
-    class TournamentSelection : ISelection
+    public class TournamentSelection : ISelection
     {
         public List<Chromosome> Select(List<Chromosome> population, int number)
         {
