@@ -18,13 +18,33 @@ namespace GlowwormSelectionTests
         [TestMethod]
         public void SelectionSchemeRunningTimeTest()
         {
-            double averageRuntimeGlowworm100Cities = GetAverageRuntime(new GlowwormSwarmSelection(), numberOfCities: 100, populationSize: 100);
-            double averageRuntimeGlowworm1000Cities = GetAverageRuntime(new GlowwormSwarmSelection(), numberOfCities: 1000, populationSize: 100);
-            double averageRuntimeGlowworm10000Cities = GetAverageRuntime(new GlowwormSwarmSelection(), numberOfCities: 10000, populationSize: 100);
+            int[] cityCounts = { 100, 1000, 10000, 100000, 1000000 };
 
-            Console.WriteLine(averageRuntimeGlowworm100Cities);
-            Console.WriteLine(averageRuntimeGlowworm1000Cities);
-            Console.WriteLine(averageRuntimeGlowworm10000Cities);
+            //CPU warmup
+            GetAverageRuntime(new GlowwormSwarmSelection(), numberOfCities: 100, populationSize: 100);
+            GetAverageRuntime(new RouletteWheelSelection(), numberOfCities: 100, populationSize: 100);
+            GetAverageRuntime(new TruncateSelection(), numberOfCities: 100, populationSize: 100);
+            GetAverageRuntime(new TournamentSelection(), numberOfCities: 100, populationSize: 100);
+
+            //print results
+            foreach (var cityCount in cityCounts)
+            {
+                Console.WriteLine("City Count: " + cityCount);
+
+                double runTimeGlowworm = GetAverageRuntime(new GlowwormSwarmSelection(), numberOfCities: cityCount, populationSize: 100);
+                Console.WriteLine("GSO: " + runTimeGlowworm + "ms");
+
+                double runtimeRoulette = GetAverageRuntime(new RouletteWheelSelection(), numberOfCities: cityCount, populationSize: 100);
+                Console.WriteLine("Roulette: " + runtimeRoulette + "ms");
+
+                double runtimeTruncate = GetAverageRuntime(new TruncateSelection(), numberOfCities: cityCount, populationSize: 100);
+                Console.WriteLine("Truncate: " + runtimeTruncate + "ms");
+
+                double runtimeTournament = GetAverageRuntime(new TournamentSelection(), numberOfCities: cityCount, populationSize: 100);
+                Console.WriteLine("Tournament: " + runtimeTournament + "ms");
+
+                Console.WriteLine();
+            }
         }
 
         public double GetAverageRuntime(ISelection selectionScheme, int numberOfCities, int populationSize)
