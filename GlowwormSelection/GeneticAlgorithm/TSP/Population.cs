@@ -25,43 +25,23 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             GenerateInitialPopulation(populationSize);
         }
 
-
         public void GenerateCityData(int numberOfCities)
         {
             Cities = new List<City>();
-
-            Dictionary<string, int> distances = new Dictionary<string, int>(); // stores the distances for the entire graph
+            int minX = -300;
+            int maxX = 300;
+            int minY = -300;
+            int maxY = -300;
 
             for (int i = 0; i < numberOfCities; i++)
             {
-                Console.WriteLine("Generating data for City " + i);
-                City city = new City("City " + i);
-
-
-                //set distances for city i
-                for (int j = 0; j < numberOfCities; j++)
-                {
-                    if (i != j)
-                    {
-                        int distance;
-
-                        distances.TryGetValue(i + "-" + j, out distance);
-
-                        // TryGetValue returns default value for int if the key was not found. Our distance can never be at 0 so we can use this to check if the key exists
-                        if (distance == 0)
-                        {
-                            distance = ThreadSafeRandom.CurrentThreadRandom.Next(101);
-                            distances[i + "-" + j] = distance;
-                            distances[j + "-" + i] = distance;
-                        }
-
-
-                        city.SetDistance("City " + j, distance);
-                    }
-                }
+                double x = ThreadSafeRandom.CurrentThreadRandom.NextDouble() * (maxX - minX) + minX;
+                double y = ThreadSafeRandom.CurrentThreadRandom.NextDouble() * (maxY - minY) + minY;
+                City city = new City("City " + i, x, y);
 
                 Cities.Add(city);
             }
+
         }
 
         public void GenerateInitialPopulation(int populationSize)
@@ -84,12 +64,9 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             }
         }
 
-        public void NextGeneration()
+        public void NextGeneration(ISelection selectionScheme)
         {
-            //var selected = new GlowwormSwarmSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
-            var selected = new RouletteWheelSelection().Select(this.Chromosomes, (int)Math.Floor(Math.Sqrt(Cities.Count)));
-            //var selected = new TruncateSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
-            //var selected = new TournamentSelection().Select(this.chromosomes, (int)Math.Floor(Math.Sqrt(cities.Count)));
+            var selected = selectionScheme.Select(this.Chromosomes, (int)Math.Floor(Math.Sqrt(Cities.Count)));
 
             // remove uncalculated chromosomes from population
             this.Chromosomes.RemoveAll(m => m.GetCost() == -1);

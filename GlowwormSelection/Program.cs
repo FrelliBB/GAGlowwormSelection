@@ -16,7 +16,7 @@ namespace GlowwormSelection
 
             for (int i = 0; i < numberOfGenerations; i++)
             {
-                p.NextGeneration();
+                p.NextGeneration(new GlowwormSwarmSelection());
             }
 
             Console.ReadLine();
