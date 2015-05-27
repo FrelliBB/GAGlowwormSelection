@@ -28,10 +28,10 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
         public void GenerateCityData(int numberOfCities)
         {
             Cities = new List<City>();
-            int minX = -300;
-            int maxX = 300;
-            int minY = -300;
-            int maxY = -300;
+            int minX = 0;
+            int maxX = 100;
+            int minY = 0;
+            int maxY = 100;
 
             for (int i = 0; i < numberOfCities; i++)
             {
