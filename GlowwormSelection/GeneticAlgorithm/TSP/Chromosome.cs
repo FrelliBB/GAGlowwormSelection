@@ -6,17 +6,18 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
     public class Chromosome
     {
         public List<City> cities;
-        private double cost = -1;
+        public double Cost { get; set; }
 
         public Chromosome(List<City> cities)
         {
+            Cost = -1;
             this.cities = cities;
         }
 
         public double GetFitness()
         {
             // only calculate the cost once
-            if (cost == -1)
+            if (Cost == -1)
             {
                 // add the distance from the last city to the first city
                 double totalCost = cities[0].GetDistance(cities[cities.Count - 1]);
@@ -27,21 +28,21 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
                     totalCost += cities[i].GetDistance(cities[i + 1]);
                 }
 
-                cost = totalCost;
+                Cost = totalCost;
 
             }
 
-            return 1.0 - (cost / (cities.Count * 100.0));
+            return 1.0 - (Cost / (cities.Count * 100.0));
         }
 
         public double GetCost()
         {
-            return cost;
+            return Cost;
         }
 
         public void ResetCost()
         {
-            cost = -1;
+            Cost = -1;
         }
 
         public void Mutate()

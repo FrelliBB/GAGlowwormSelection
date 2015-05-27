@@ -13,13 +13,14 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
         public List<Chromosome> Select(List<Chromosome> population, int number)
         {
             var selected = new List<Chromosome>();
-            var sumFitness = population.Sum(c => c.GetFitness());
+            var maxCost = population.Max(c => c.Cost);
+            var sumFitness = population.Sum(c => maxCost - c.Cost);
             var rouleteWheel = new List<double>();
             var accumulativePercent = 0.0;
 
             foreach (var c in population)
             {
-                accumulativePercent += c.GetFitness() / sumFitness;
+                accumulativePercent += (maxCost - c.Cost) / sumFitness;
                 rouleteWheel.Add(accumulativePercent);
             }
 
