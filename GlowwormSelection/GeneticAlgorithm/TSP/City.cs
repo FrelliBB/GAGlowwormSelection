@@ -23,7 +23,7 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 
         public override string ToString()
         {
-            return string.Format("{0} ({1},{2})", this.Name, this.X, this.Y);
+            return string.Format("{0} ({1}, {2})", this.Name, this.X, this.Y);
         }
     }
 }

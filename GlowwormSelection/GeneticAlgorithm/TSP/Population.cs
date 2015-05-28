@@ -13,15 +13,27 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
         public List<City> Cities { get; set; } //stores the cities that need to be traversed for the TSP
         public int PopulationSize { get; set; }
         public int NumberOfCities { get; set; }
+        public Double BestTour { get; set; }
 
         int currentGeneration = 1;
 
         public Population(int numberOfCities, int populationSize)
         {
+            BestTour = double.MaxValue;
             this.PopulationSize = populationSize;
             this.NumberOfCities = numberOfCities;
 
             GenerateCityData(numberOfCities);
+            GenerateInitialPopulation(populationSize);
+        }
+
+        public Population(List<City> cities, int populationSize)
+        {
+            BestTour = double.MaxValue;
+            this.PopulationSize = populationSize;
+            this.NumberOfCities = cities.Count;
+
+            this.Cities = cities;
             GenerateInitialPopulation(populationSize);
         }
 
@@ -102,7 +114,7 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
                 Chromosomes.Add(child);
             }
 
-
+            BestTour = Chromosomes.Where(c => c.Cost > 0).Min(c => c.Cost);
             currentGeneration++;
         }
     }
