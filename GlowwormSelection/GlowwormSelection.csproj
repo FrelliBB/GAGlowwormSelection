@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Extensions\ThreadSafeRandom.cs" />
     <Compile Include="GeneticAlgorithm\Crossover\Crossover.cs" />
+    <Compile Include="GeneticAlgorithm\SelectionSchemes\HybridGlowwormSelection.cs" />
     <Compile Include="GeneticAlgorithm\SelectionSchemes\RouletteWheelSelection.cs" />
     <Compile Include="GeneticAlgorithm\SelectionSchemes\TournamentSelection.cs" />
     <Compile Include="GSO\Glowworm.cs" />

@@ -16,9 +16,9 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             this.Y = y;
         }
 
-        public double GetDistance(City otherCity)
+        public long GetDistance(City otherCity)
         {
-            return Math.Sqrt(Math.Pow(otherCity.X - this.X, 2) + Math.Pow(otherCity.Y - this.Y, 2));
+            return Convert.ToInt64(Math.Sqrt(Math.Pow(otherCity.X - this.X, 2) + Math.Pow(otherCity.Y - this.Y, 2)));
         }
 
         public override string ToString()

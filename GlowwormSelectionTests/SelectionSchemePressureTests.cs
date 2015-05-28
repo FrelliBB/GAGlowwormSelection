@@ -16,34 +16,70 @@ namespace GlowwormSelectionTests
         [TestMethod]
         public void SelectionScehemePressureTest()
         {
-            Population p = new Population(numberOfCities: 100, populationSize: 100);
+            int iterations = 100000;
+            int popSize = 100;
 
-            Dictionary<Chromosome, int> d = new Dictionary<Chromosome, int>();
+            Population p = new Population(numberOfCities: 1000, populationSize: popSize);
 
             foreach (var chrom in p.Chromosomes)
             {
                 chrom.GetFitness();
-                d.Add(chrom, 0);
             }
 
-            TournamentSelection ts = new TournamentSelection();
-            RouletteWheelSelection rws = new RouletteWheelSelection();
-            GlowwormSwarmSelection gso = new GlowwormSwarmSelection();
-            TruncateSelection trs = new TruncateSelection();
-            for (int i = 0; i < 100000; i++)
-            {
-                var selected = gso.Select(p.Chromosomes, 2);
+            ISelection[] schemes = { 
+                new TournamentSelection(),
+                new RouletteWheelSelection(),
+                new GlowwormSwarmSelection(),
+                new HybridGlowwormSwarmSelection(),
+                new TruncateSelection()
+            };
 
-                foreach (var item in selected)
+            bool printedFirstLine = false;
+            foreach (var scheme in schemes)
+            {
+                Dictionary<Chromosome, int> d = new Dictionary<Chromosome, int>();
+                foreach (var chrom in p.Chromosomes)
                 {
-                    d[item]++;
+                    d.Add(chrom, 0);
                 }
 
+                for (int i = 0; i < iterations; i++)
+                {
+                    var selected = scheme.Select(p.Chromosomes, 1);
+
+                    foreach (var item in selected)
+                    {
+                        d[item]++;
+                    }
+                }
+
+                var result = d.OrderByDescending(c => c.Key.GetFitness());
+
+                if (!printedFirstLine)
+                {
+                    Console.Write("rank,");
+                    for (int i = 0; i < result.Count(); i++)
+                    {
+                        Console.Write(i + ",");
+                    }
+                    Console.WriteLine();
+
+                    Console.Write("cost,");
+                    foreach (var item in result)
+                    {
+                        Console.Write(Convert.ToInt32(item.Key.Cost) + ",");
+                    }
+                    Console.WriteLine();
+                    printedFirstLine = true;
+                }
+
+                Console.Write(scheme.GetType().Name + ",");
+                foreach (var item in result)
+                {
+                    Console.Write(item.Value + ",");
+                }
+                Console.WriteLine();
             }
-
-            var result = d.OrderByDescending(c => c.Key.GetFitness());
-
-            int x = 2;
         }
     }
 }

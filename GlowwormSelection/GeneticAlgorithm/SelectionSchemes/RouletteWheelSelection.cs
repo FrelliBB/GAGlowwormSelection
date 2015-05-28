@@ -12,9 +12,15 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
     {
         public List<Chromosome> Select(List<Chromosome> population, int number)
         {
+            foreach (var item in population)
+            {
+                item.GetFitness();
+            }
+
             var selected = new List<Chromosome>();
             var maxCost = population.Max(c => c.Cost);
             var sumFitness = population.Sum(c => maxCost - c.Cost);
+
             var rouleteWheel = new List<double>();
             var accumulativePercent = 0.0;
 
