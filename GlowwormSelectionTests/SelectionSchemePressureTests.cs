@@ -30,7 +30,6 @@ namespace GlowwormSelectionTests
                 new TournamentSelection(),
                 new RouletteWheelSelection(),
                 new GlowwormSwarmSelection(),
-                new HybridGlowwormSwarmSelection(),
                 new TruncateSelection()
             };
 

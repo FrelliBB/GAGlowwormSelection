@@ -78,32 +78,23 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 
         public void NextGeneration(ISelection selectionScheme)
         {
-            var selected = selectionScheme.Select(this.Chromosomes, (int)Math.Floor(Math.Sqrt(Cities.Count)));
+            var selected = selectionScheme.Select(Chromosomes, this.PopulationSize / 10);
 
             // remove uncalculated chromosomes from population
             this.Chromosomes.RemoveAll(m => m.GetCost() == -1);
-            Chromosomes = Chromosomes.OrderByDescending(c => c.GetCost()).ToList();
 
             // leave only top 10% of population
+            Chromosomes = Chromosomes.OrderByDescending(c => c.GetCost()).ToList();
             while (this.Chromosomes.Count > PopulationSize / 10)
             {
                 Chromosomes.RemoveAt(0);
             }
 
-            if (currentGeneration % 5 == 0)
-            {
-                Console.WriteLine("Generation " + currentGeneration + " Best: " + Chromosomes.Min(c => c.GetCost()));
-            }
-
             // fill the remaining empty space with children generated from selected chromosomes
             while (this.Chromosomes.Count < PopulationSize)
             {
-                var parents = new RouletteWheelSelection().Select(selected, 2);
-                Chromosome parent1 = parents[0];
-                Chromosome parent2 = parents[1];
-
-                //Chromosome parent1 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
-                //Chromosome parent2 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
+                Chromosome parent1 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
+                Chromosome parent2 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
 
                 Chromosome child = OrderedCrossover.MakeChild(parent1, parent2);
                 if (ThreadSafeRandom.CurrentThreadRandom.NextDouble() < 0.5)
@@ -116,6 +107,11 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 
             BestTour = Chromosomes.Where(c => c.Cost > 0).Min(c => c.Cost);
             currentGeneration++;
+
+            if (currentGeneration % 1000 == 0)
+            {
+                Console.WriteLine("Generation " + currentGeneration + " Best: " + BestTour);
+            }
         }
     }
 }

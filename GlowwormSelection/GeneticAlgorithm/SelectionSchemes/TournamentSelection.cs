@@ -15,6 +15,11 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
             var candidates = population.ToList();
             var selected = new List<Chromosome>();
 
+            foreach (var item in population)
+            {
+                item.GetFitness();
+            }
+
             while (selected.Count < number)
             {
                 int[] participantIndices = { ThreadSafeRandom.CurrentThreadRandom.Next(0, candidates.Count), ThreadSafeRandom.CurrentThreadRandom.Next(0, candidates.Count) };

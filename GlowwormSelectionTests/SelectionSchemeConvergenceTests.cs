@@ -17,15 +17,18 @@ namespace GlowwormSelectionTests
         public void SelectionSchemeConvergenceTest()
         {
             int optimalTourLength;
-            List<City> cities = ParseFile("dj38.tsp", out optimalTourLength);
+            List<City> cities = ParseFile("lu980.tsp", out optimalTourLength);
             Population p = new Population(cities, 100);
+
+            //p.NextGeneration2(new GlowwormSwarmSelection());
 
             int generations = 0;
             do
             {
-                p.NextGeneration(new GlowwormSwarmSelection());
+                p.NextGeneration(new RouletteWheelSelection());
                 generations++;
-            } while (p.BestTour > optimalTourLength || generations < 1000000);
+                Console.WriteLine(p.BestTour);
+            } while (p.BestTour > optimalTourLength && generations < 1000);
 
             Console.WriteLine(generations);
             Console.WriteLine(p.BestTour);
