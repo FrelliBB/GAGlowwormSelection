@@ -78,46 +78,40 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 
         public void NextGeneration(ISelection selectionScheme)
         {
-            foreach (var item in Chromosomes)
-            {
-                item.GetFitness();
-            }
+            var selected = selectionScheme.Select(Chromosomes, 5).OrderByDescending(s => s.Cost).ToList();
 
-            var selected = selectionScheme.Select(Chromosomes, 2);
-            //var selected = selectionScheme.Select(Chromosomes, this.PopulationSize / 20);
-
-            // remove uncalculated chromosomes from population
-            // this.Chromosomes.RemoveAll(m => m.GetCost() == -1);
-
-            // leave only top 95% of population
-            Chromosomes = Chromosomes.OrderByDescending(c => c.GetCost()).ToList();
-            while (this.Chromosomes.Count > PopulationSize * 0.98)
-            {
-                Chromosomes.RemoveAt(0);
-            }
+            Chromosomes.Remove(selected[0]);
+            Chromosomes.Remove(selected[1]);
 
             // fill the remaining empty space with children generated from selected chromosomes
-            while (this.Chromosomes.Count < PopulationSize)
+            Chromosome parent1 = selected[3];
+            Chromosome parent2 = selected[4];
+
+            Chromosome child1 = OrderedCrossover.MakeChild(parent1, parent2);
+            Chromosome child2 = OrderedCrossover.MakeChild(parent2, parent1);
+
+            if (ThreadSafeRandom.CurrentThreadRandom.Next(100) < 3)
             {
-                Chromosome parent1 = selected[0];
-                Chromosome parent2 = selected[1];
-
-                Chromosome child = OrderedCrossover.MakeChild(parent1, parent2);
-                if (ThreadSafeRandom.CurrentThreadRandom.Next(100) < 3)
-                {
-                    child.Mutate();
-                }
-
-                Chromosomes.Add(child);
+                child1.Mutate();
+            }
+            if (ThreadSafeRandom.CurrentThreadRandom.Next(100) < 3)
+            {
+                child2.Mutate();
             }
 
-            BestTour = Chromosomes.Where(c => c.Cost > 0).Min(c => c.Cost);
-            currentGeneration++;
+            Chromosomes.Add(child1);
+            Chromosomes.Add(child2);
 
-            if (currentGeneration % 10 == 0)
+            double currentTour = Chromosomes.Where(c => c.Cost > 0).Min(c => c.Cost);
+
+            if (currentTour < BestTour)
             {
+                BestTour = currentTour;
                 Console.WriteLine("Generation " + currentGeneration + " Best: " + BestTour);
             }
+
+            currentGeneration++;
+
         }
     }
 }

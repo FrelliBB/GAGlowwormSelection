@@ -32,7 +32,8 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 
             }
 
-            return 1.0 - (Cost / (cities.Count * 100.0));
+            //return 1.0 - (Cost / (cities.Count * 100.0));
+            return 1.0 / Cost * 10000;
         }
 
         public double GetCost()

@@ -20,19 +20,19 @@ namespace GlowwormSelection
         public static void SelectionSchemeConvergenceTest()
         {
             int successCount = 0;
-            int maxGenerations = 10000;
+            int maxGenerations = 100000;
 
             int optimalTourLength;
             List<City> cities = ParseFile("wi29.tsp", out optimalTourLength);
 
             for (int i = 0; i < 100; i++)
             {
-                Population p = new Population(cities, 100);
+                Population p = new Population(cities, 1024);
 
                 int generations = 0;
                 do
                 {
-                    p.NextGeneration(new GlowwormSwarmSelection());
+                    p.NextGeneration(new RouletteWheelSelection());
                     generations++;
                 } while (p.BestTour > optimalTourLength && generations < maxGenerations);
 
