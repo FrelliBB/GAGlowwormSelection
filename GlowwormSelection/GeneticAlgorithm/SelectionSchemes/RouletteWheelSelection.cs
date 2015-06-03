@@ -21,6 +21,11 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
             var maxCost = population.Max(c => c.Cost);
             var sumFitness = population.Sum(c => maxCost - c.Cost);
 
+            if (sumFitness <= 0)
+            {
+                return population;
+            }
+
             var rouleteWheel = new List<double>();
             var accumulativePercent = 0.0;
 
@@ -33,8 +38,8 @@ namespace GlowwormSelection.GeneticAlgorithm.SelectionSchemes
             for (int i = 0; i < number; i++)
             {
                 var pointer = ThreadSafeRandom.CurrentThreadRandom.NextDouble();
-                var chromosomeIndex = rouleteWheel.Select((value, index) => new { Value = value, Index = index }).FirstOrDefault(r => r.Value >= pointer).Index;
-                selected.Add(population[chromosomeIndex]);
+                var chromosome = rouleteWheel.Select((value, index) => new { Value = value, Index = index }).FirstOrDefault(r => r.Value >= pointer);
+                selected.Add(population[chromosome.Index]);
             }
 
             return selected;

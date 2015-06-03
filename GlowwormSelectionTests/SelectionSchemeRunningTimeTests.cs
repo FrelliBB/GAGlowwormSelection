@@ -18,7 +18,7 @@ namespace GlowwormSelectionTests
         [TestMethod]
         public void RunningTimeCityCountTest()
         {
-            int[] cityCounts = { 100, 500, 2500, 5000, 10000, 10000 };
+            int[] cityCounts = { 100, 500, 2500, 5000, 10000, 25000 };
             ISelection[] schemes = { new TournamentSelection(), new GlowwormSwarmSelection(), new TruncateSelection(), new RouletteWheelSelection() };
 
             StringBuilder sb = new StringBuilder();
@@ -81,7 +81,7 @@ namespace GlowwormSelectionTests
                 sb.Append(popSize + ",");
                 foreach (var scheme in schemes)
                 {
-                    double runtime = GetAverageRuntime(scheme, numberOfCities: 5, populationSize: popSize);
+                    double runtime = GetAverageRuntime(scheme, numberOfCities: 200, populationSize: popSize);
                     sb.Append(runtime + ",");
                 }
 

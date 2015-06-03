@@ -78,14 +78,20 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
 
         public void NextGeneration(ISelection selectionScheme)
         {
-            var selected = selectionScheme.Select(Chromosomes, this.PopulationSize / 10);
+            foreach (var item in Chromosomes)
+            {
+                item.GetFitness();
+            }
+
+            var selected = selectionScheme.Select(Chromosomes, 2);
+            //var selected = selectionScheme.Select(Chromosomes, this.PopulationSize / 20);
 
             // remove uncalculated chromosomes from population
-            this.Chromosomes.RemoveAll(m => m.GetCost() == -1);
+            // this.Chromosomes.RemoveAll(m => m.GetCost() == -1);
 
-            // leave only top 10% of population
+            // leave only top 95% of population
             Chromosomes = Chromosomes.OrderByDescending(c => c.GetCost()).ToList();
-            while (this.Chromosomes.Count > PopulationSize / 10)
+            while (this.Chromosomes.Count > PopulationSize * 0.98)
             {
                 Chromosomes.RemoveAt(0);
             }
@@ -93,11 +99,11 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             // fill the remaining empty space with children generated from selected chromosomes
             while (this.Chromosomes.Count < PopulationSize)
             {
-                Chromosome parent1 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
-                Chromosome parent2 = selected[ThreadSafeRandom.CurrentThreadRandom.Next(0, selected.Count - 1)];
+                Chromosome parent1 = selected[0];
+                Chromosome parent2 = selected[1];
 
                 Chromosome child = OrderedCrossover.MakeChild(parent1, parent2);
-                if (ThreadSafeRandom.CurrentThreadRandom.NextDouble() < 0.5)
+                if (ThreadSafeRandom.CurrentThreadRandom.Next(100) < 3)
                 {
                     child.Mutate();
                 }
@@ -108,7 +114,7 @@ namespace GlowwormSelection.GeneticAlgorithm.TSP
             BestTour = Chromosomes.Where(c => c.Cost > 0).Min(c => c.Cost);
             currentGeneration++;
 
-            if (currentGeneration % 1000 == 0)
+            if (currentGeneration % 10 == 0)
             {
                 Console.WriteLine("Generation " + currentGeneration + " Best: " + BestTour);
             }

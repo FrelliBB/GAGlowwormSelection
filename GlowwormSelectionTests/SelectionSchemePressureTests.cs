@@ -18,6 +18,7 @@ namespace GlowwormSelectionTests
         {
             int iterations = 100000;
             int popSize = 100;
+            int chromosomesToSelect = 10;
 
             Population p = new Population(numberOfCities: 1000, populationSize: popSize);
 
@@ -44,7 +45,7 @@ namespace GlowwormSelectionTests
 
                 for (int i = 0; i < iterations; i++)
                 {
-                    var selected = scheme.Select(p.Chromosomes, 1);
+                    var selected = scheme.Select(p.Chromosomes, chromosomesToSelect);
 
                     foreach (var item in selected)
                     {
@@ -75,7 +76,8 @@ namespace GlowwormSelectionTests
                 Console.Write(scheme.GetType().Name + ",");
                 foreach (var item in result)
                 {
-                    Console.Write(item.Value + ",");
+                    double percentage = (double)item.Value / (double)((iterations * chromosomesToSelect)) * 100.0;
+                    Console.Write(percentage + "%,");
                 }
                 Console.WriteLine();
             }

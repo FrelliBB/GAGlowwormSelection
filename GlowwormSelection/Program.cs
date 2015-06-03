@@ -12,17 +12,6 @@ namespace GlowwormSelection
     {
         static void Main(string[] args)
         {
-            //ThreadSafeRandom.InitializeSeed(1337);
-            //int numberOfGenerations = 1000;
-            //Population p = new Population(1000, 225);
-
-            //for (int i = 0; i < numberOfGenerations; i++)
-            //{
-            //    p.NextGeneration(new GlowwormSwarmSelection());
-            //}
-
-            //Console.ReadLine();
-
             SelectionSchemeConvergenceTest();
 
             Console.ReadLine();
@@ -30,22 +19,36 @@ namespace GlowwormSelection
 
         public static void SelectionSchemeConvergenceTest()
         {
+            int successCount = 0;
+            int maxGenerations = 10000;
+
             int optimalTourLength;
-            List<City> cities = ParseFile("dj38.tsp", out optimalTourLength);
-            Population p = new Population(cities, 100);
+            List<City> cities = ParseFile("wi29.tsp", out optimalTourLength);
 
-            //p.NextGeneration2(new GlowwormSwarmSelection());
-
-            int generations = 0;
-            do
+            for (int i = 0; i < 100; i++)
             {
-                p.NextGeneration(new RouletteWheelSelection());
-                generations++;
-            } while (p.BestTour > optimalTourLength);
+                Population p = new Population(cities, 100);
+
+                int generations = 0;
+                do
+                {
+                    p.NextGeneration(new GlowwormSwarmSelection());
+                    generations++;
+                } while (p.BestTour > optimalTourLength && generations < maxGenerations);
+
+                if (p.BestTour == optimalTourLength)
+                {
+                    successCount++;
+                }
+
+                Console.WriteLine("----DONE----");
+                Console.WriteLine(generations);
+                Console.WriteLine(p.BestTour);
+            }
 
             Console.WriteLine("----DONE----");
-            Console.WriteLine(generations);
-            Console.WriteLine(p.BestTour);
+            Console.WriteLine("Success COunt: " + successCount);
+
         }
 
         public static List<City> ParseFile(string filename, out int tour)

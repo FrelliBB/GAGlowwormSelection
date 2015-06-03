@@ -50,6 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="GSONumberOfChromosomesCalculatedCount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectionSchemeConvergenceTests.cs" />
     <Compile Include="SelectionSchemePressureTests.cs" />
